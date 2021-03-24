@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node ./src/server.ts",
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
     "clean": "rimraf www/ || true",
-    "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
+    "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www && zip -r Archive.zip && cd ..",
     "dev": "ts-node-dev ./src/server.ts"
   },
   "repository": {
