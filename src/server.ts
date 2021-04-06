@@ -35,14 +35,23 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     //get image_url query
     const {image_url} = req.query
 
-    //get filteredpath by using filterImagefromURL function
-    const filteredpath = await filterImageFromURL(image_url)
-    
-    //send filtered image in response
-    res.sendFile(filteredpath)
+    try {
+       //get filteredpath by using filterImagefromURL function
+       if (image_url){
+        const filteredpath = await filterImageFromURL(image_url)
+        //send filtered image in response
+        res.send(filteredpath)
 
-    //delete file from filesystem
-    deleteLocalFiles([image_url])
+        //delete file from filesystem
+        await deleteLocalFiles([image_url])
+       }else{
+        throw new Error("There was an error! Please try again.");         
+       }
+    
+    } catch (err) {
+      throw new Error("There was an error! Please try again.");         
+    }
+   
   })
   
   // Root Endpoint
