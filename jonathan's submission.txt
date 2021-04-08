@@ -1,0 +1,5 @@
+
+Github repository link : https://github.com/jooankrah/image-filter-starter-code.git
+ElasticBeanstalk Link : http://udacity-course-2-dev.us-east-2.elasticbeanstalk.com/
+
+A screenshot of the elasticbeanstalk dashboard has been added in the deployment_screenshots directory of the project.
