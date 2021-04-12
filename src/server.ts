@@ -31,32 +31,49 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   //! END @TODO1
 
-  app.get("/filteredimage", async (req, res) => {
+  app.get("/filteredimage", async (req:express.Request, res:express.Response) => {
     //get image_url query
     const {image_url} = req.query
+
+    const validateImageQuery = async (imageUrl:string) => { //from https://stackoverflow.com/questions/30970068/js-regex-url-validation/30970319 (best answer)
+      var res = imageUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+      if(res == null)
+          return false;
+      else
+          return true;
+    }
+
+
+    //this code snippet is referenced from Victor A's comment in this thread https://knowledge.udacity.com/questions/166155
+    let isValid = await validateImageQuery(image_url);
+    if(!isValid) {
+      return res.status(400).send('invalid image url!');
+    }
 
     try {
        //get filteredpath by using filterImagefromURL function
        if (image_url){
         const filteredpath = await filterImageFromURL(image_url)
         //send filtered image in response
-        res.send(filteredpath)
+        res.status(200).sendFile(filteredpath)
 
         //delete file from filesystem
         await deleteLocalFiles([image_url])
        }else{
-        throw new Error("There was an error! Please try again.");         
+        res.status(422);       
+        throw new Error("There was an error! Please try again.");  
        }
     
     } catch (err) {
-      throw new Error("There was an error! Please try again.");         
+      res.status(422);             
+      throw new Error("There was an error! Please try again.");   
     }
    
   })
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get( "/", async (req:express.Request, res:express.Response) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
